@@ -4,7 +4,9 @@
   "description": "news project for devs.krd",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dbMigration": "npx knex migrate:latest --knexfile ./database/knexfile.js",
+    "dev": "npx nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -21,5 +23,13 @@
   "bugs": {
     "url": "https://github.com/DevelopersTree/news-devs-krd/issues"
   },
-  "homepage": "https://github.com/DevelopersTree/news-devs-krd#readme"
+  "homepage": "https://github.com/DevelopersTree/news-devs-krd#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "knex": "^0.21.1",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
 }
