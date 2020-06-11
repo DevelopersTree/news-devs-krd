@@ -1,21 +1,21 @@
 const developmentConf = {
     client: 'mysql',
     connection: {
-    host : '127.0.0.1',
-    user : 'root',
-    password : 'r@@t',
-        database : 'news-devs-krd'
+        host : process.env.HOST,
+        user : process.env.DB_USER,
+        password : process.env.DB_PASSWORD,
+        database : process.env.DB_NAME
     },
     migrations: {
         tableName: 'knex_migrations',
         directory: "./migrations",
     }
 }
-const knex = require('knex')({
+const db = require('knex')({
     ...developmentConf
 });
 
 module.exports = {
-    knex,
+    db,
     developmentConf
 };
