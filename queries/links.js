@@ -1,4 +1,4 @@
-const {db} = require('./../database/config');
+const {db} = require('../database/config');
 
 function readListQuery(limit, offset){
     return db('links')

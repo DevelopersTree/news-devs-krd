@@ -1,13 +1,15 @@
 const express = require('express');
-const router  = express.Router();
-const { create, readList, readSingle }= require('./../queries/link')
-router.get('/hello',(req, res)=>{
-    res.json({
-        msg: 'hello world'
-    });
-});
 
-router.get('/list', (req, res, next)=>{
+const router  = express.Router();
+const { create, readList, readSingle }= require('./../queries/links');
+const { createValidator, }= require('./../middlewares/links');
+const paginateValidator = require('./../middlewares/common/paginate');
+const searchQuery = require('./../middlewares/common/searchQuery');
+
+
+
+
+router.get('/list', paginateValidator, searchQuery, (req, res, next)=>{
     readList(req).then((data)=> {
         res.json(data)
     }).catch((e)=>{
@@ -35,7 +37,8 @@ router.get('/:link_id', (req, res, next)=>{
 
 
 
-router.post('/', (req, res, next)=>{
+router.post('/', createValidator, (req, res, next)=>{
+    
     create(req).then((data)=> {
         res.json({
             msg: 'success',
