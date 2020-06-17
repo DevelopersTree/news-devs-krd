@@ -1,9 +1,8 @@
 const express = require('express');
-require('dotenv').config()
+require('dotenv').config();
 
 const app = express();
-const linksRouter = require('./routes/links')
-
+const linksRouter = require('./routes/links');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
