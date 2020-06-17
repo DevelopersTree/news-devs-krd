@@ -12,5 +12,6 @@
         "ecmaVersion": 11
     },
     "rules": {
+        "arrow-body-style": "off"
     }
 }

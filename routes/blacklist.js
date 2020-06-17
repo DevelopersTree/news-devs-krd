@@ -2,9 +2,9 @@ const express = require('express');
 
 const router = express.Router();
 const {
-  create, readList, readSingle, del, upvote, update,
-} = require('../queries/links');
-const { createValidator, readSingleValidator, updateValidator } = require('../middlewares/links');
+  create, readList, readSingle, del,
+} = require('../queries/blacklist');
+const { createValidator, readSingleValidator } = require('../middlewares/blacklist');
 const paginateValidator = require('../middlewares/common/paginate');
 const searchQuery = require('../middlewares/common/searchQuery');
 
@@ -18,7 +18,7 @@ router.get('/list', paginateValidator, searchQuery, (req, res) => {
   });
 });
 
-router.get('/:link_id', readSingleValidator, (req, res) => {
+router.get('/:blacklist_link_id', readSingleValidator, (req, res) => {
   readSingle(req).then(([data]) => {
     if (data) {
       res.json(data);
@@ -34,8 +34,8 @@ router.get('/:link_id', readSingleValidator, (req, res) => {
   });
 });
 
-router.delete('/:link_id', readSingleValidator, (req, res) => {
-  del(req.params.link_id).then(() => {
+router.delete('/:blacklist_link_id', readSingleValidator, (req, res) => {
+  del(req.params.blacklist_link_id).then(() => {
     res.json({
       status: 1,
       msg: 'link deleted',
@@ -56,34 +56,6 @@ router.post('/', createValidator, (req, res) => {
   }).catch(() => {
     res.status(400).json({
       msg: 'bad request',
-    });
-  });
-});
-
-router.put('/:link_id', updateValidator, (req, res) => {
-  update(req).then(() => {
-    res.json({
-      msg: 'success',
-      id: req.params.link_id,
-    });
-  }).catch(() => {
-    res.status(500).json({
-      msg: 'server error',
-    });
-  });
-});
-
-// bellow link requires the publisher to be logedin
-// req.publisher.id this variable should be fetched from JWT token
-router.get('/:link_id/upvote', readSingleValidator, (req, res) => {
-  upvote(req.publisher.id, req.params.link_id).then(() => {
-    res.json({
-      status: 1,
-      msg: 'link upvoted',
-    });
-  }).catch(() => {
-    res.status(500).json({
-      msg: 'server error',
     });
   });
 });

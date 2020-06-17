@@ -2,9 +2,9 @@ const express = require('express');
 
 const router = express.Router();
 const {
-  create, readList, readSingle, del, upvote, update,
-} = require('../queries/links');
-const { createValidator, readSingleValidator, updateValidator } = require('../middlewares/links');
+  create, readList, readSingle, update,
+} = require('../queries/publisher');
+const { createValidator, readSingleValidator, updateValidator } = require('../middlewares/publisher');
 const paginateValidator = require('../middlewares/common/paginate');
 const searchQuery = require('../middlewares/common/searchQuery');
 
@@ -18,7 +18,7 @@ router.get('/list', paginateValidator, searchQuery, (req, res) => {
   });
 });
 
-router.get('/:link_id', readSingleValidator, (req, res) => {
+router.get('/:publisher_id', readSingleValidator, (req, res) => {
   readSingle(req).then(([data]) => {
     if (data) {
       res.json(data);
@@ -27,19 +27,6 @@ router.get('/:link_id', readSingleValidator, (req, res) => {
         msg: 'resource not found',
       });
     }
-  }).catch(() => {
-    res.status(500).json({
-      msg: 'server error',
-    });
-  });
-});
-
-router.delete('/:link_id', readSingleValidator, (req, res) => {
-  del(req.params.link_id).then(() => {
-    res.json({
-      status: 1,
-      msg: 'link deleted',
-    });
   }).catch(() => {
     res.status(500).json({
       msg: 'server error',
@@ -60,26 +47,12 @@ router.post('/', createValidator, (req, res) => {
   });
 });
 
-router.put('/:link_id', updateValidator, (req, res) => {
+// this will require JWT validation
+router.put('/:publisher_id', updateValidator, (req, res) => {
   update(req).then(() => {
     res.json({
       msg: 'success',
-      id: req.params.link_id,
-    });
-  }).catch(() => {
-    res.status(500).json({
-      msg: 'server error',
-    });
-  });
-});
-
-// bellow link requires the publisher to be logedin
-// req.publisher.id this variable should be fetched from JWT token
-router.get('/:link_id/upvote', readSingleValidator, (req, res) => {
-  upvote(req.publisher.id, req.params.link_id).then(() => {
-    res.json({
-      status: 1,
-      msg: 'link upvoted',
+      id: req.params.publisher_id,
     });
   }).catch(() => {
     res.status(500).json({

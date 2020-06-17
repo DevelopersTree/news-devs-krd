@@ -2,14 +2,18 @@ const { db } = require('../database/config');
 
 function readListQuery(limit, offset) {
   return db('links')
-    .select()
+    .select('links.*', 'publisher.name as publisher_name', 'publisher.name as publisher_name')
+    .leftJoin('publisher', 'publisher.id', 'publisher_id')
+    .where('publisher.blocked', 0)
     .limit(limit)
     .offset(offset);
 }
 function readSingleQuery(id) {
   return db('links')
-    .select()
-    .where('id', id)
+    .select('links.*', 'publisher.name as publisher_name')
+    .leftJoin('publisher', 'publisher.id', 'publisher_id')
+    .where('publisher.blocked', 0)
+    .andWhere('id', id)
     .limit(1);
 }
 
@@ -37,6 +41,32 @@ module.exports = {
       created_at: db.fn.now(),
     });
   },
-  update: () => {},
-  del: () => {},
+  update: (req) => {
+    const { body } = req;
+    return db('links').update({
+      title: body.title,
+      desc: body.desc,
+      thumbnail: body.thumbnail,
+      url: body.url,
+      post_date: body.post_date,
+    }).where('id', req.params.link_id);
+  },
+  del: (id) => db('links').del().where('id', id),
+
+  upvote: (publisherId, linkId) => {
+    return db('link_votes').insert({
+      publisher_id: publisherId,
+      link_id: linkId,
+      created_at: db.fn.now(),
+    }).then(() => {
+      return db.raw('UPDATE links SET up_votes = up_votes+1 WHERE id=?', [linkId]).then(() => {
+        return {
+          publisher_id: publisherId,
+          link_id: linkId,
+          msg: 'link is voted',
+        };
+      });
+    });
+  }
+  ,
 };
