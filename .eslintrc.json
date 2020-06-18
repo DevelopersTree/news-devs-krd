@@ -12,6 +12,8 @@
         "ecmaVersion": 11
     },
     "rules": {
-        "arrow-body-style": "off"
+        "arrow-body-style": "off",
+        "no-tabs": "off",
+        "indent": [2, "tab"]
     }
 }
