@@ -40,7 +40,7 @@ router.post('/', createValidator, (req, res) => {
 			msg: 'success',
 			id: data,
 		});
-	}).catch(() => {
+	}).catch((e) => {
 		res.status(400).json({
 			msg: 'bad request',
 		});

@@ -91,6 +91,20 @@ module.exports = {
 			.withMessage('invalid length '),
 		validate,
 	],
+	loginValidator: [
+		body('username')
+			.exists()
+			.isString()
+			.isLength({ min: 0 })
+			.withMessage('invalid length '),
+		body('password')
+			.exists()
+			.isString()
+			.trim()
+			.isLength({ min: 0, max: 45 })
+			.withMessage('invalid length '),
+		validate,
+	],
 	readSingleValidator: [
 		param('publisher_id')
 			.exists()

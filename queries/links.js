@@ -2,7 +2,7 @@ const { db } = require('../database/config');
 
 function readListQuery(limit, offset) {
 	return db('links')
-		.select('links.*', 'publisher.name as publisher_name', 'publisher.name as publisher_name')
+		.select('links.*', 'publisher.username as publisher_name', 'publisher.username as publisher_name')
 		.leftJoin('publisher', 'publisher.id', 'publisher_id')
 		.where('publisher.blocked', 0)
 		.limit(limit)
@@ -10,7 +10,7 @@ function readListQuery(limit, offset) {
 }
 function readSingleQuery(id) {
 	return db('links')
-		.select('links.*', 'publisher.name as publisher_name')
+		.select('links.*', 'publisher.username as publisher_name')
 		.leftJoin('publisher', 'publisher.id', 'publisher_id')
 		.where('publisher.blocked', 0)
 		.andWhere('id', id)

@@ -7,11 +7,13 @@ const {
 const { createValidator, readSingleValidator, updateValidator } = require('../middlewares/links');
 const paginateValidator = require('../middlewares/common/paginate');
 const searchQuery = require('../middlewares/common/searchQuery');
+const jwtVerify = require('../middlewares/jwtVerify');
 
 router.get('/list', paginateValidator, searchQuery, (req, res) => {
 	readList(req).then((data) => {
 		res.json(data);
-	}).catch(() => {
+	}).catch((e) => {
+		console.log(e)
 		res.status(500).json({
 			msg: 'server error',
 		});
@@ -47,7 +49,7 @@ router.delete('/:link_id', readSingleValidator, (req, res) => {
 	});
 });
 
-router.post('/', createValidator, (req, res) => {
+router.post('/', jwtVerify, createValidator, (req, res) => {
 	create(req).then((data) => {
 		res.json({
 			msg: 'success',
