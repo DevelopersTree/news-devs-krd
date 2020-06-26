@@ -1,7 +1,7 @@
 const { body, param } = require('express-validator');
 const moment = require('moment');
 const validate = require('./validate');
-const { urlDataValidator, blacklistedUrlDataValidator } = require('../queries/validators/links');
+const { urlDataValidator, blacklistedUrlDataValidator, linkOwnership, linkUpvoteDataValidator } = require('../queries/validators/links');
 
 module.exports = {
 	createValidator: [
@@ -41,7 +41,8 @@ module.exports = {
 	],
 	updateValidator: [
 		param('link_id')
-			.isInt({ gt: 0 }).withMessage('invalid link_id'),
+			.isInt({ gt: 0 }).withMessage('invalid link_id')
+			.custom((value, {req})=> linkOwnership(value, req) ),
 		body('title')
 			.isString()
 			.isLength({ min: 3 }).withMessage('invalid length '),
@@ -70,6 +71,19 @@ module.exports = {
 				}
 				return Promise.reject(new Error('invalid date format'));
 			}),
+		validate,
+	],
+	deleteValidator: [
+		param('link_id')
+			.isInt({ gt: 0 }).withMessage('invalid link_id')
+			.custom((value, {req})=> linkOwnership(value, req) ),
+		validate,
+	],
+	upvoteValidator: [
+		param('link_id')
+			.isInt({ gt: 0 }).withMessage('invalid link_id')
+			.custom((value, {req})=> linkUpvoteDataValidator(value, req) ),
+		
 		validate,
 	],
 	readSingleValidator: [

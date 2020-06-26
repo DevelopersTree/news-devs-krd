@@ -4,7 +4,7 @@ const router = express.Router();
 const {
 	create, readList, readSingle, del, upvote, update,
 } = require('../queries/links');
-const { createValidator, readSingleValidator, updateValidator } = require('../middlewares/links');
+const { createValidator, readSingleValidator, updateValidator, upvoteValidator, deleteValidator } = require('../middlewares/links');
 const paginateValidator = require('../middlewares/common/paginate');
 const searchQuery = require('../middlewares/common/searchQuery');
 const jwtVerify = require('../middlewares/jwtVerify');
@@ -36,7 +36,7 @@ router.get('/:link_id', readSingleValidator, (req, res) => {
 	});
 });
 
-router.delete('/:link_id', readSingleValidator, (req, res) => {
+router.delete('/:link_id', jwtVerify, deleteValidator, (req, res) => {
 	del(req.params.link_id).then(() => {
 		res.json({
 			status: 1,
@@ -62,7 +62,7 @@ router.post('/', jwtVerify, createValidator, (req, res) => {
 	});
 });
 
-router.put('/:link_id', updateValidator, (req, res) => {
+router.put('/:link_id', jwtVerify, updateValidator, (req, res) => {
 	update(req).then(() => {
 		res.json({
 			msg: 'success',
@@ -75,9 +75,7 @@ router.put('/:link_id', updateValidator, (req, res) => {
 	});
 });
 
-// bellow link requires the publisher to be logedin
-// req.publisher.id this variable should be fetched from JWT token
-router.get('/:link_id/upvote', readSingleValidator, (req, res) => {
+router.post('/:link_id/upvote', jwtVerify, upvoteValidator, (req, res) => {
 	upvote(req.publisher.id, req.params.link_id).then(() => {
 		res.json({
 			status: 1,

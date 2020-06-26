@@ -15,13 +15,13 @@ router.post('/login', loginValidator, async (req, res) => {
         if(step1Data){
             const {salt} = step1Data;
             const hashedPassword = sha1(`${salt}${body.password}`);
-            db('publisher').select().where('password', hashedPassword).limit(1)
+            db('publisher').select().where('password', hashedPassword).andWhere('username', body.username).limit(1)
             .then(([step2Data])=>{
                 if(step2Data){
                     const token = jwt.sign({ 
                         id: step2Data.id,
                     },
-                    'jwt secret dhjasdkajs',
+                    process.env.JWT_SECRET,
                     { expiresIn: '1000h' }
                     );
                     step2Data.token = token;

@@ -13,7 +13,7 @@ function readSingleQuery(id) {
 		.select('links.*', 'publisher.username as publisher_name')
 		.leftJoin('publisher', 'publisher.id', 'publisher_id')
 		.where('publisher.blocked', 0)
-		.andWhere('id', id)
+		.andWhere('links.id', id)
 		.limit(1);
 }
 
@@ -36,7 +36,7 @@ module.exports = {
 			desc: body.desc,
 			thumbnail: body.thumbnail,
 			url: body.url,
-			publisher_id: body.publisher_id,
+			publisher_id: req.publisher.id,
 			post_date: body.post_date,
 			created_at: db.fn.now(),
 		});
@@ -67,6 +67,5 @@ module.exports = {
 				};
 			});
 		});
-	}
-	,
+	},
 };
