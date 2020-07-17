@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
@@ -7,6 +8,7 @@ const blackListRouter = require('./routes/blacklist');
 const publisherRouter = require('./routes/publisher');
 const authRouter = require('./routes/auth');
 
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
