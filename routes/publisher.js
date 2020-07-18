@@ -7,6 +7,7 @@ const {
 const { createValidator, readSingleValidator, updateValidator } = require('../middlewares/publisher');
 const paginateValidator = require('../middlewares/common/paginate');
 const searchQuery = require('../middlewares/common/searchQuery');
+const jwtVerify = require('../middlewares/jwtVerify');
 
 router.get('/list', paginateValidator, searchQuery, (req, res) => {
 	readList(req).then((data) => {
@@ -40,7 +41,7 @@ router.post('/', createValidator, (req, res) => {
 			msg: 'success',
 			id: data,
 		});
-	}).catch((e) => {
+	}).catch(() => {
 		res.status(400).json({
 			msg: 'bad request',
 		});
@@ -48,7 +49,7 @@ router.post('/', createValidator, (req, res) => {
 });
 
 // this will require JWT validation
-router.put('/:publisher_id', updateValidator, (req, res) => {
+router.put('/', jwtVerify, updateValidator, (req, res) => {
 	update(req).then(() => {
 		res.json({
 			msg: 'success',

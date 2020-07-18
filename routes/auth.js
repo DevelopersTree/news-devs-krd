@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const sha1 = require('sha1');
@@ -25,6 +26,8 @@ router.post('/login', loginValidator, async (req, res) => {
 							process.env.JWT_SECRET,
 							{ expiresIn: '1000h' });
 							step2Data.token = token;
+							delete step2Data.password;
+							delete step2Data.salt;
 							res.status(200).json(step2Data);
 						} else {
 							res.status(404).json({
