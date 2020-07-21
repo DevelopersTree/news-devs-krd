@@ -44,7 +44,9 @@ module.exports = {
 		body('profile')
 			.optional()
 			.isString()
-			.trim(),
+			.trim()
+			.isLength({ max: 500000 })
+			.withMessage('قه‌باره‌ی رێپێدراوی وێنه‌ نابێت له500kb كه‌متر بێت'),
 		validate,
 	],
 	updateValidator: [
@@ -88,7 +90,9 @@ module.exports = {
 		body('profile')
 			.optional()
 			.isString()
-			.trim(),
+			.trim()
+			.isLength({ max: 500000 })
+			.withMessage('قه‌باره‌ی رێپێدراوی وێنه‌ نابێت له500kb كه‌متر بێت'),
 		validate,
 	],
 	loginValidator: [
