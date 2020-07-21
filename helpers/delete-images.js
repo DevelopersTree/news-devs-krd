@@ -17,7 +17,6 @@ module.exports = async (keys = []) => {
 		if (err) {
 			return Promise.reject(err);
 		}
-
 		return Promise.resolve(data);
 	});
 };

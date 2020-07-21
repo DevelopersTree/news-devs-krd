@@ -43,16 +43,17 @@ router.post('/', createValidator, (req, res) => {
 		});
 	}).catch(() => {
 		res.status(400).json({
-			msg: 'bad request',
+			msg: 'Bad Request',
 		});
 	});
 });
 
 // this will require JWT validation
 router.put('/', jwtVerify, updateValidator, (req, res) => {
-	update(req).then(() => {
+	update(req).then((data) => {
 		res.json({
 			msg: 'success',
+			data,
 			id: req.params.publisher_id,
 		});
 	}).catch(() => {

@@ -8,13 +8,13 @@ const { db } = require('../database/config');
 
 function readListQuery(limit, offset) {
 	return db('publisher')
-		.select()
+		.select('id', 'username', 'profile', 'website_url', 'uid', 'email', 'created_at')
 		.limit(limit)
 		.offset(offset);
 }
 function readSingleQuery(id) {
 	return db('publisher')
-		.select()
+		.select('id', 'username', 'profile', 'website_url', 'uid', 'email', 'created_at')
 		.where('id', id)
 		.limit(1);
 }
@@ -80,7 +80,12 @@ module.exports = {
 			profileRequests = profileRequests[0];
 			updateObject.profile = `${profileRequests[0].key}` || '';
 		}
-		return db('publisher').update(updateObject).where('id', req.publisher.id);
+		return db('publisher').update(updateObject).where('id', req.publisher.id).then(async () => {
+			const [publisher] = await db('publisher')
+				.select('id', 'username', 'profile', 'website_url', 'uid', 'email', 'created_at')
+				.where('id', req.publisher.id).limit(1);
+			return publisher;
+		});
 	},
 	block: (id) => db('publisher').update({ blocked: 1 }).where('id', id),
 	unblock: (id) => db('publisher').update({ blocked: 0 }).where('id', id),
