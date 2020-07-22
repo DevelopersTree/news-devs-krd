@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const {
-	create, readList, readSingle, update,
+	create, readPublicList, readPopulerList, readSingle, update,
 } = require('../queries/publisher');
 const { createValidator, readSingleValidator, updateValidator } = require('../middlewares/publisher');
 const paginateValidator = require('../middlewares/common/paginate');
@@ -10,7 +10,16 @@ const searchQuery = require('../middlewares/common/searchQuery');
 const jwtVerify = require('../middlewares/jwtVerify');
 
 router.get('/list', paginateValidator, searchQuery, (req, res) => {
-	readList(req).then((data) => {
+	readPublicList(req).then((data) => {
+		res.json(data);
+	}).catch(() => {
+		res.status(500).json({
+			msg: 'server error',
+		});
+	});
+});
+router.get('/populer/list', paginateValidator, searchQuery, (req, res) => {
+	readPopulerList(req).then((data) => {
 		res.json(data);
 	}).catch(() => {
 		res.status(500).json({

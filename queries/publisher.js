@@ -8,7 +8,7 @@ const { db } = require('../database/config');
 
 function readListQuery(limit, offset) {
 	return db('publisher')
-		.select('id', 'username', 'profile', 'website_url', 'uid', 'email', 'created_at')
+		.select('publisher.id', 'username', 'profile', 'website_url', 'uid', 'email', 'publisher.created_at')
 		.limit(limit)
 		.offset(offset);
 }
@@ -30,6 +30,15 @@ module.exports = {
 		const limit = req.query.limit || 10;
 		const offset = req.query.offset || 0;
 		return readListQuery(limit, offset).where('blocked', 0);
+	},
+	readPopulerList: (req) => {
+		const limit = req.query.limit || 10;
+		const offset = req.query.offset || 0;
+		return readListQuery(limit, offset)
+			.leftJoin('links', 'publisher.id', 'links.publisher_id')
+			.groupBy('publisher.id')
+			.orderByRaw('COUNT(links.id) asc')
+			.where('blocked', 0);
 	},
 	readSingleQuery,
 	readSingle: (req) => {
