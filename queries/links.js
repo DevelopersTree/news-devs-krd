@@ -5,7 +5,8 @@ const imgRemover = require('../helpers/delete-images');
 
 function readListQuery(limit, offset) {
 	return db('links')
-		.select('links.*', 'publisher.username as publisher_name', 'publisher.username as publisher_name')
+		.select('links.*', 'publisher.username as publisher_name',
+			'publisher.profile as publisher_profile', 'publisher.website_url as publisher_website')
 		.leftJoin('publisher', 'publisher.id', 'publisher_id')
 		.where('publisher.blocked', 0)
 		.limit(limit)
@@ -13,7 +14,8 @@ function readListQuery(limit, offset) {
 }
 function readSingleQuery(id) {
 	return db('links')
-		.select('links.*', 'publisher.username as publisher_name')
+		.select('links.*', 'publisher.username as publisher_name',
+			'publisher.profile as publisher_profile', 'publisher.website_url as publisher_website')
 		.leftJoin('publisher', 'publisher.id', 'publisher_id')
 		.where('publisher.blocked', 0)
 		.andWhere('links.id', id)
@@ -25,7 +27,7 @@ module.exports = {
 	readList: (req) => {
 		const limit = req.query.limit || 10;
 		const offset = req.query.offset || 0;
-		return readListQuery(limit, offset);
+		return readListQuery(limit, offset).orderBy('links.created_at', 'desc');
 	},
 	readSingleQuery,
 	readSingle: (req) => {

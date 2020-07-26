@@ -19,7 +19,7 @@ module.exports = {
 			.optional()
 			.isString()
 			.trim()
-			.isLength({ max: 500000 })
+			.isLength({ max: 1000000 })
 			.withMessage('قه‌باره‌ی رێپێدراوی وێنه‌ نابێت له500kb كه‌متر بێت'),
 		body('url')
 			.isString()
@@ -55,7 +55,7 @@ module.exports = {
 			.optional()
 			.isString()
 			.trim()
-			.isLength({ max: 500000 })
+			.isLength({ max: 1000000 })
 			.withMessage('قه‌باره‌ی رێپێدراوی وێنه‌ نابێت له500kb كه‌متر بێت'),
 		body('original_thumbnail')
 			.optional()
