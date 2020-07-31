@@ -4,7 +4,12 @@ const router = express.Router();
 const {
 	create, readList, readSingle, del, upvote, update,
 } = require('../queries/links');
-const { createValidator, readSingleValidator, updateValidator, upvoteValidator, deleteValidator } = require('../middlewares/links');
+const { createValidator,
+	 readSingleValidator, 
+	 updateValidator, 
+	 upvoteValidator, 
+	 deleteValidator 
+} = require('../middlewares/links');
 const paginateValidator = require('../middlewares/common/paginate');
 const searchQuery = require('../middlewares/common/searchQuery');
 const jwtVerify = require('../middlewares/jwtVerify');
@@ -12,8 +17,7 @@ const jwtVerify = require('../middlewares/jwtVerify');
 router.get('/list', paginateValidator, searchQuery, (req, res) => {
 	readList(req).then((data) => {
 		res.json(data);
-	}).catch((e) => {
-		console.log(e)
+	}).catch(() => {
 		res.status(500).json({
 			msg: 'server error',
 		});
@@ -79,7 +83,7 @@ router.post('/:link_id/upvote', jwtVerify, upvoteValidator, (req, res) => {
 	upvote(req.publisher.id, req.params.link_id).then(() => {
 		res.json({
 			status: 1,
-			msg: 'link upvoted',
+			msg: 'ده‌نگ درا',
 		});
 	}).catch(() => {
 		res.status(500).json({
