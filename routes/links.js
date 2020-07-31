@@ -4,11 +4,12 @@ const router = express.Router();
 const {
 	create, readList, readSingle, del, upvote, update,
 } = require('../queries/links');
-const { createValidator,
-	 readSingleValidator, 
-	 updateValidator, 
-	 upvoteValidator, 
-	 deleteValidator 
+const {
+	createValidator,
+	readSingleValidator,
+	updateValidator,
+	upvoteValidator,
+	deleteValidator,
 } = require('../middlewares/links');
 const paginateValidator = require('../middlewares/common/paginate');
 const searchQuery = require('../middlewares/common/searchQuery');

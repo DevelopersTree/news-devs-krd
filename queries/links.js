@@ -3,14 +3,22 @@ const { db } = require('../database/config');
 const uploader = require('../helpers/upload-images');
 const imgRemover = require('../helpers/delete-images');
 
-function readListQuery(limit, offset) {
-	return db('links')
+async function readListQuery(limit, offset) {
+	const query = db('links')
 		.select('links.*', 'publisher.username as publisher_name',
 			'publisher.profile as publisher_profile', 'publisher.website_url as publisher_website')
 		.leftJoin('publisher', 'publisher.id', 'publisher_id')
 		.where('publisher.blocked', 0)
+		.orderBy('links.created_at', 'desc')
 		.limit(limit)
 		.offset(offset);
+	const countQuery = db('links').count('links.id as records')
+		.leftJoin('publisher', 'publisher.id', 'publisher_id');
+	const [records, [countResponse]] = await Promise.all([query, countQuery]);
+	return Promise.resolve({
+		records,
+		totalRecords: countResponse.records,
+	});
 }
 function readSingleQuery(id) {
 	return db('links')
@@ -27,7 +35,7 @@ module.exports = {
 	readList: (req) => {
 		const limit = req.query.limit || 10;
 		const offset = req.query.offset || 0;
-		return readListQuery(limit, offset).orderBy('links.created_at', 'desc');
+		return readListQuery(limit, offset);
 	},
 	readSingleQuery,
 	readSingle: (req) => {
