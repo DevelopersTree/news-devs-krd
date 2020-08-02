@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const {
-	create, readList, readSingle, del, upvote, update,
+	create, readList, readSingle, del, upvote, update, readMyList,
 } = require('../queries/links');
 const {
 	createValidator,
@@ -17,6 +17,16 @@ const jwtVerify = require('../middlewares/jwtVerify');
 
 router.get('/list', paginateValidator, searchQuery, (req, res) => {
 	readList(req).then((data) => {
+		res.json(data);
+	}).catch(() => {
+		res.status(500).json({
+			msg: 'server error',
+		});
+	});
+});
+
+router.get('/mylist', jwtVerify, paginateValidator, searchQuery, (req, res) => {
+	readMyList(req).then((data) => {
 		res.json(data);
 	}).catch(() => {
 		res.status(500).json({

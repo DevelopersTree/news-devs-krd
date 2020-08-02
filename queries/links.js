@@ -3,7 +3,7 @@ const { db } = require('../database/config');
 const uploader = require('../helpers/upload-images');
 const imgRemover = require('../helpers/delete-images');
 
-async function readListQuery(limit, offset, q = undefined) {
+async function readListQuery(limit, offset, q = undefined, publisherId = 0) {
 	const query = db('links')
 		.select('links.*', 'publisher.username as publisher_name',
 			'publisher.profile as publisher_profile', 'publisher.website_url as publisher_website')
@@ -17,6 +17,10 @@ async function readListQuery(limit, offset, q = undefined) {
 	if (q) {
 		query.andWhere('links.title', 'LIKE', `%${q}%`);
 		countQuery.andWhere('links.title', 'LIKE', `%${q}%`);
+	}
+	if (publisherId > 0) {
+		query.andWhere('links.publisher_id', publisherId);
+		countQuery.andWhere('links.publisher_id', publisherId);
 	}
 	const [records, [countResponse]] = await Promise.all([query, countQuery]);
 	return Promise.resolve({
@@ -40,6 +44,11 @@ module.exports = {
 		const limit = req.query.limit || 10;
 		const offset = req.query.offset || 0;
 		return readListQuery(limit, offset, req.query.q);
+	},
+	readMyList: (req) => {
+		const limit = req.query.limit || 10;
+		const offset = req.query.offset || 0;
+		return readListQuery(limit, offset, req.query.q, req.publisher.id);
 	},
 	readSingleQuery,
 	readSingle: (req) => {
