@@ -97,7 +97,14 @@ module.exports = {
 		}
 		return db('links').update(updateObject).where('id', req.params.link_id);
 	},
-	del: (id) => db('links').del().where('id', id),
+	del: async (id) => {
+		const [link] = await readSingleQuery(id);
+		if (link) {
+			await imgRemover([link.thumbnail]);
+			return db('links').del().where('id', id);
+		}
+		return Promise.resolve(true);
+	},
 
 	upvote: (publisherId, linkId) => {
 		return db('link_votes').insert({

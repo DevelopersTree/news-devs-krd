@@ -55,7 +55,7 @@ router.delete('/:link_id', jwtVerify, deleteValidator, (req, res) => {
 	del(req.params.link_id).then(() => {
 		res.json({
 			status: 1,
-			msg: 'link deleted',
+			msg: 'به‌سته‌ر سرایه‌وه‌',
 		});
 	}).catch(() => {
 		res.status(500).json({
