@@ -17,7 +17,7 @@ module.exports = (req, res, next) => {
 			}
 		} else {
 			res.status(401).json({
-				msg: 'invalid JWT provided',
+				msg: 'پێویسته‌ له‌ژووره‌وه‌ بیت بۆ ئه‌نجامدانی ئه‌م كاره‌',
 			});
 		}
 	} catch (err) {
