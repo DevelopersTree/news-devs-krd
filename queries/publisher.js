@@ -8,13 +8,16 @@ const { db } = require('../database/config');
 
 function readListQuery(limit, offset) {
 	return db('publisher')
-		.select('publisher.id', 'username', 'profile', 'website_url', 'uid', 'email', 'publisher.created_at')
+		.select('publisher.id', 'username', 'profile', 'website_url', 'uid', 'email',
+			'verified', 'rssfeed_url', 'display_name',
+			'publisher.created_at')
 		.limit(limit)
 		.offset(offset);
 }
 function readSingleQuery(id) {
 	return db('publisher')
-		.select('id', 'username', 'profile', 'website_url', 'uid', 'email', 'created_at')
+		.select('id', 'username', 'profile', 'website_url', 'uid', 'email',
+			'verified', 'created_at', 'rssfeed_url', 'display_name')
 		.where('id', id)
 		.limit(1);
 }
@@ -50,6 +53,8 @@ module.exports = {
 		const generatedSalt = uniqid();
 		const insertObject = {
 			website_url: body.website_url,
+			rssfeed_url: body.rssfeed_url,
+			display_name: body.display_name,
 			username: body.username,
 			password: sha1(`${generatedSalt}${body.password}`),
 			salt: generatedSalt,
@@ -70,6 +75,8 @@ module.exports = {
 		const { body } = req;
 		const updateObject = {
 			website_url: body.website_url,
+			rssfeed_url: body.rssfeed_url,
+			display_name: body.display_name,
 			email: body.email,
 		};
 		if (body.password) {
@@ -91,7 +98,7 @@ module.exports = {
 		}
 		return db('publisher').update(updateObject).where('id', req.publisher.id).then(async () => {
 			const [publisher] = await db('publisher')
-				.select('id', 'username', 'profile', 'website_url', 'uid', 'email', 'created_at')
+				.select('id', 'username', 'profile', 'website_url', 'uid', 'email', 'rssfeed_url', 'display_name', 'created_at')
 				.where('id', req.publisher.id).limit(1);
 			return publisher;
 		});

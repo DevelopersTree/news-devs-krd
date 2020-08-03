@@ -9,6 +9,17 @@ module.exports = {
 			.isString()
 			.isLength({ min: 0 })
 			.withMessage('ژماره‌ی پیته‌كان هه‌ڵه‌یه‌'),
+		body('rssfeed_url')
+			.exists()
+			.isString()
+			.isLength({ min: 0 })
+			.withMessage('ژماره‌ی پیته‌كان هه‌ڵه‌یه‌'),
+		body('display_name')
+			.exists()
+			.isString()
+			.trim()
+			.isLength({ min: 0, max: 35 })
+			.withMessage('ژماره‌ی پیته‌كان هه‌ڵه‌یه‌'),
 		body('username')
 			.exists()
 			.isString()
@@ -58,6 +69,17 @@ module.exports = {
 			.isString()
 			.isLength({ min: 0 })
 			.withMessage('ژماره‌ی پیته‌كان هه‌ڵه‌یه‌'),
+		body('rssfeed_url')
+			.exists()
+			.isString()
+			.isLength({ min: 0 })
+			.withMessage('ژماره‌ی پیته‌كان هه‌ڵه‌یه‌'),
+		body('display_name')
+			.exists()
+			.isString()
+			.trim()
+			.isLength({ min: 0, max: 35 })
+			.withMessage('ژماره‌ی پیته‌كان هه‌ڵه‌یه‌'),
 		body('password')
 			.optional()
 			.isString()
@@ -85,6 +107,10 @@ module.exports = {
 			.withMessage('ژماره‌ی پیته‌كان هه‌ڵه‌یه‌'),
 		body('original_profile')
 			.optional()
+			.customSanitizer((v) => {
+				if (v == null) return '';
+				return v;
+			})
 			.isString()
 			.trim(),
 		body('profile')

@@ -2,6 +2,8 @@ exports.up = (knex) => knex.schema.createTable('publisher', (table) => {
 	table.increments('id').primary();
 	table.string('profile', 350).defaultTo('');
 	table.string('website_url', 350).defaultTo('');
+	table.string('rssfeed_url', 450).defaultTo('');
+	table.string('display_name', 350).notNullable().defaultTo('');
 	table.string('username', 350).notNullable().defaultTo('');
 	table.string('password', 350).notNullable().defaultTo('');
 	table.string('salt', 350).notNullable().defaultTo('');

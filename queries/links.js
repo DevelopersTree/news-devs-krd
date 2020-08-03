@@ -1,3 +1,5 @@
+const sha1 = require('sha1');
+
 const { db } = require('../database/config');
 
 const uploader = require('../helpers/upload-images');
@@ -61,6 +63,7 @@ module.exports = {
 			title: body.title,
 			desc: body.desc,
 			url: body.url,
+			url_hash: sha1(body.url),
 			publisher_id: req.publisher.id,
 			post_date: body.post_date,
 			created_at: db.fn.now(),
