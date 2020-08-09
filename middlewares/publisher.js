@@ -1,6 +1,9 @@
 const { body, param } = require('express-validator');
 const validate = require('./validate');
 const { usernameDataValidator } = require('../queries/validators/publisher');
+const {
+	blacklistedUrlDataValidator,
+} = require('../queries/validators/links');
 
 module.exports = {
 	createValidator: [
@@ -8,12 +11,14 @@ module.exports = {
 			.exists()
 			.isString()
 			.isLength({ min: 0 })
-			.withMessage('ژماره‌ی پیته‌كان هه‌ڵه‌یه‌'),
+			.withMessage('ژماره‌ی پیته‌كان هه‌ڵه‌یه‌')
+			.custom((value) => blacklistedUrlDataValidator(value)),
 		body('rssfeed_url')
 			.exists()
 			.isString()
 			.isLength({ min: 0 })
-			.withMessage('ژماره‌ی پیته‌كان هه‌ڵه‌یه‌'),
+			.withMessage('ژماره‌ی پیته‌كان هه‌ڵه‌یه‌')
+			.custom((value) => blacklistedUrlDataValidator(value)),
 		body('display_name')
 			.exists()
 			.isString()

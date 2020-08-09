@@ -7,6 +7,7 @@ exports.up = (knex) => knex.schema.createTable('links', (table) => {
 	table.string('url_hash', 500).notNullable().defaultTo('');
 	table.integer('publisher_id').notNullable().defaultTo(0);
 	table.integer('up_votes').notNullable().defaultTo(0);
+	table.boolean('auto_added').notNullable().defaultTo(0);
 	table.datetime('created_at', { precision: 6 });
 	table.datetime('post_date', { precision: 6 });
 	table.charset('utf8');
