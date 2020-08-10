@@ -40,7 +40,7 @@ module.exports = {
 		return readListQuery(limit, offset)
 			.leftJoin('links', 'publisher.id', 'links.publisher_id')
 			.groupBy('publisher.id')
-			.orderByRaw('COUNT(links.id) asc')
+			.orderByRaw('COUNT(links.id) desc')
 			.where('blocked', 0);
 	},
 	readSingleQuery,
