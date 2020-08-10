@@ -34,30 +34,30 @@ router.get('/:blacklist_link_id', readSingleValidator, (req, res) => {
 	});
 });
 
-router.delete('/:blacklist_link_id', readSingleValidator, (req, res) => {
-	del(req.params.blacklist_link_id).then(() => {
-		res.json({
-			status: 1,
-			msg: 'link deleted',
-		});
-	}).catch(() => {
-		res.status(500).json({
-			msg: 'server error',
-		});
-	});
-});
+// router.delete('/:blacklist_link_id', readSingleValidator, (req, res) => {
+// 	del(req.params.blacklist_link_id).then(() => {
+// 		res.json({
+// 			status: 1,
+// 			msg: 'link deleted',
+// 		});
+// 	}).catch(() => {
+// 		res.status(500).json({
+// 			msg: 'server error',
+// 		});
+// 	});
+// });
 
-router.post('/', createValidator, (req, res) => {
-	create(req).then((data) => {
-		res.json({
-			msg: 'success',
-			id: data,
-		});
-	}).catch(() => {
-		res.status(400).json({
-			msg: 'bad request',
-		});
-	});
-});
+// router.post('/', createValidator, (req, res) => {
+// 	create(req).then((data) => {
+// 		res.json({
+// 			msg: 'success',
+// 			id: data,
+// 		});
+// 	}).catch(() => {
+// 		res.status(400).json({
+// 			msg: 'bad request',
+// 		});
+// 	});
+// });
 
 module.exports = router;
