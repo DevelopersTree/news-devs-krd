@@ -73,7 +73,7 @@ module.exports = {
 				verified
 			ORDER BY COUNT(links.id) desc
 			LIMIT 10
-		`);
+		`).then(([data])=> data );
 	},
 	readSingleQuery,
 	readSingle: (req) => {
