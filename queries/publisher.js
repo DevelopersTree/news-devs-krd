@@ -34,14 +34,46 @@ module.exports = {
 		const offset = req.query.offset || 0;
 		return readListQuery(limit, offset).where('blocked', 0);
 	},
+// 	readPopulerList: (req) => {
+// 		const limit = req.query.limit || 10;
+// 		const offset = req.query.offset || 0;
+// 		return readListQuery(limit, offset)
+// 			.leftJoin('links', 'publisher.id', 'links.publisher_id')
+// 			.groupBy('publisher.id')
+// 			.orderByRaw('COUNT(links.id) desc')
+// 			.where('blocked', 0);
+// 	},
 	readPopulerList: (req) => {
 		const limit = req.query.limit || 10;
 		const offset = req.query.offset || 0;
-		return readListQuery(limit, offset)
-			.leftJoin('links', 'publisher.id', 'links.publisher_id')
-			.groupBy('publisher.id')
-			.orderByRaw('COUNT(links.id) desc')
-			.where('blocked', 0);
+		return db.raw(`
+			SELECT 
+				publisher_id,
+				COUNT(links.id) as link_count,
+				publisher.id,
+				display_name,
+				profile,
+				website_url,
+				rssfeed_url,
+				email,
+				verified
+
+			FROM links,publisher 
+			WHERE links.publisher_id=publisher.id AND 
+				  publisher.blocked = 0
+
+			GROUP BY 
+				publisher_id,
+				publisher.id,
+				display_name,
+				profile,
+				website_url,
+				rssfeed_url,
+				email,
+				verified
+			ORDER BY COUNT(links.id) desc
+			LIMIT 10
+		`);
 	},
 	readSingleQuery,
 	readSingle: (req) => {
