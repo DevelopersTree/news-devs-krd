@@ -33,7 +33,7 @@
     "express-validator": "^6.5.0",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.1",
-    "moment": "^2.26.0",
+    "moment": "^2.29.4",
     "mysql": "^2.18.1",
     "sha1": "^1.1.1",
     "uniqid": "^5.2.0"
